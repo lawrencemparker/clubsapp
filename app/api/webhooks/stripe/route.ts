@@ -3,7 +3,10 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-01-27.acacia', // Ensure this matches your installed version or error log
+});
+
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -11,7 +14,9 @@ const supabaseAdmin = createClient(
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = headers().get('Stripe-Signature') as string;
+  
+  // FIX: Await headers() because it is async in Next.js 15/16
+  const signature = (await headers()).get('Stripe-Signature') as string;
 
   let event: Stripe.Event;
 
@@ -47,7 +52,6 @@ export async function POST(req: Request) {
         .eq('id', orgId);
 
       // 2. Invite the Admin User
-      // This sends them an email (handled by Supabase Auth) to set their password.
       const { data: user, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(contactEmail, {
         data: { 
           organization_id: orgId,
