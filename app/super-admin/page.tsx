@@ -106,9 +106,9 @@ export default function SuperAdminPage() {
   const handleCreateClick = () => {
     setEditingOrgId(null); 
     setFormData({
-      status: 'pending',   // Default Status to Pending
-      storageLimitGB: 1,   // Default Storage to 1
-      monthlyFee: 250,     // Default Fee to 250
+      status: 'pending',
+      storageLimitGB: 1,
+      monthlyFee: 250,
       storageUsedGB: 0,
       firstName: '',
       lastName: '',
@@ -327,11 +327,21 @@ export default function SuperAdminPage() {
                     <div><label className="block text-[10px] font-bold text-indigo-300 uppercase mb-1">Storage (GB)</label><input type="number" className="glass-input w-full bg-slate-950 border-indigo-500/30 text-sm p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={formData.storageLimitGB || 0} onChange={e => setFormData({...formData, storageLimitGB: Number(e.target.value)})} /></div>
                     <div><label className="block text-[10px] font-bold text-emerald-300 uppercase mb-1">Fee ($)</label><input type="number" className="glass-input w-full bg-slate-950 border-emerald-500/30 text-sm p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={formData.monthlyFee || 0} onChange={e => setFormData({...formData, monthlyFee: Number(e.target.value)})} /></div>
                   </div>
-                  <div className="pt-2"><label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Status</label><select className="glass-input w-full bg-slate-950 border-white/10 text-sm p-2" value={formData.status || 'pending'} onChange={e => setFormData({...formData, status: e.target.value as any})}><option value="active">Active</option><option value="pending">Pending</option></select></div>
+                  <div className="pt-2">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Status</label>
+                    {/* Fixed select and option visibility */}
+                    <select 
+                      className="glass-input w-full bg-slate-950 border-white/10 text-sm p-2 text-white" 
+                      value={formData.status || 'pending'} 
+                      onChange={e => setFormData({...formData, status: e.target.value as any})}
+                    >
+                      <option value="active" className="bg-slate-900 text-white">Active</option>
+                      <option value="pending" className="bg-slate-900 text-white">Pending</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              {/* RESTORED LOCATION FIELDS */}
               <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3">
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">Location</h4>
                 <div className="grid grid-cols-4 gap-3">
