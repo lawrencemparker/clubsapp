@@ -3,8 +3,12 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
+// Force dynamic rendering - prevents this route from running at build time
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover', // Fixed: Changed from '2025-01-27.acacia' to match installed version
+  apiVersion: '2026-01-28.clover',
 });
 
 const supabaseAdmin = createClient(

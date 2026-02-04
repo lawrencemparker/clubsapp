@@ -102,7 +102,7 @@ export default function SuperAdminPage() {
     setIsEditModalOpen(true);
   };
 
-  const handleSave = async (e: React.FormEvent) => {
+const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -130,12 +130,13 @@ export default function SuperAdminPage() {
       const result = await response.json();
       if (!result.success) throw new Error(result.error);
 
-      // --- THE FIX: CLOSE MODAL & UPDATE TABLE ---
-      setIsEditModalOpen(false); // Closes form immediately
+      // --- 1. CLOSE MODAL IMMEDIATELY ---
+      setIsEditModalOpen(false);
 
+      // --- 2. UPDATE TABLE DATA IMMEDIATELY ---
       const newOrg: Organization = { 
         id: result.orgId, 
-        name: formData.name || 'New Org', 
+        name: formData.name || 'New Organization', 
         contactName: finalContactName, 
         status: 'pending', 
         monthlyFee: Number(formData.monthlyFee), 
@@ -151,18 +152,25 @@ export default function SuperAdminPage() {
         fileCount: 0,
         lastLogin: 'Never'
       };
-      setOrgs(prev => [newOrg, ...prev]); // Adds to database section immediately
+      
+      // Prepend to the top of the list
+      setOrgs(prev => [newOrg, ...prev]);
 
-      toast.success("Organization Created!", {
-        description: "Payment link copied to clipboard.",
-        duration: 5000,
-      });
+      // --- 3. TRIGGER NOTIFICATION ---
+      // Force notification to show after modal closes
+      setTimeout(() => {
+        toast.success("Organization Created!", {
+          description: "Payment link has been copied to your clipboard.",
+          duration: 6000,
+        });
+      }, 100);
 
       if (result.paymentUrl) {
-        navigator.clipboard.writeText(result.paymentUrl);
+        await navigator.clipboard.writeText(result.paymentUrl);
       }
 
     } catch (error: any) {
+      console.error(error);
       toast.error("Creation Failed", { description: error.message });
     } finally {
       setIsLoading(false);
