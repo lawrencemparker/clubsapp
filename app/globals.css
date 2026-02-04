@@ -1,26 +1,96 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* 1. DEFINE THEME VARIABLES (The v4 Way) */
+@theme {
+  /* Colors */
+  --color-brand-primary: #4F46E5;
+  --color-brand-secondary: #9333EA;
+  --color-brand-accent: #EC4899;
+  
+  /* Glass Variables */
+  --color-glass-surface: rgba(255, 255, 255, 0.1);
+  --color-glass-border: rgba(255, 255, 255, 0.2);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Animation */
+  --animate-blob: blob 7s infinite;
+  
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
   }
 }
 
+/* 2. BASE STYLES */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(to bottom right, #0f172a, #1e293b);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 3. UTILITY CLASSES 
+   In v4, we use standard CSS syntax where possible to avoid @apply bugs.
+*/
+
+/* The Glass Panel */
+.glass-panel {
+  @apply backdrop-blur-md shadow-xl rounded-2xl;
+  background-color: var(--color-glass-surface);
+  border: 1px solid var(--color-glass-border);
+  background-image: linear-gradient(
+    180deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+/* Interactive Buttons */
+.glass-button {
+  @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  color: white;
+}
+
+.glass-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Inputs */
+.glass-input {
+  @apply w-full rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none transition-colors;
+  background-color: transparent;
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(5px);
+}
+
+.glass-input:focus {
+  border-color: var(--color-brand-primary);
+}
+
+/* Orbs */
+.orb {
+  @apply absolute rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob;
+}
+
+.orb-1 {
+  background-color: var(--color-brand-primary);
+  top: 0; left: -1rem; width: 18rem; height: 18rem;
+  animation-delay: 0s;
+}
+.orb-2 {
+  background-color: var(--color-brand-secondary);
+  top: 0; right: -1rem; width: 18rem; height: 18rem;
+  animation-delay: 2s;
+}
+.orb-3 {
+  background-color: var(--color-brand-accent);
+  bottom: -2rem; left: 5rem; width: 18rem; height: 18rem;
+  animation-delay: 4s;
 }
