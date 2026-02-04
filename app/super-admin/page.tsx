@@ -200,9 +200,9 @@ export default function SuperAdminPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    // LOGIC: If Creating, combine First+Last. If Editing, use existing Contact Name.
+    // FIX: Force finalContactName to be a string (default to '')
     const finalContactName = editingOrgId 
-      ? formData.contactName 
+      ? (formData.contactName || '') 
       : `${formData.firstName || ''} ${formData.lastName || ''}`.trim();
 
     // --- 1. EDIT MODE ---
@@ -257,7 +257,7 @@ export default function SuperAdminPage() {
       setOrgs([...orgs, { 
         id: result.orgId, 
         name: formData.name!, 
-        contactName: finalContactName,
+        contactName: finalContactName, // FIX: This is now strictly a string
         status: 'pending', 
         monthlyFee: Number(formData.monthlyFee), 
         paymentStatus: 'past_due',
@@ -498,7 +498,7 @@ export default function SuperAdminPage() {
                   <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3">
                     <h4 className="text-sm font-bold text-white flex items-center gap-2">Primary Contact</h4>
                     
-                    {/* --- THIS IS THE FIX YOU NEED: SPLIT FIELDS --- */}
+                    {/* SPLIT FIELDS: Only show split fields for New Organization */}
                     {editingOrgId ? (
                         <div>
                             <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</label>
@@ -560,7 +560,7 @@ export default function SuperAdminPage() {
         </div>
       )}
 
-      {/* --- MODAL 2: MANAGE SUPER ADMINS (Hidden by logic for now, but code exists) --- */}
+      {/* --- MODAL 2: MANAGE SUPER ADMINS --- */}
       {isManageTeamOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onClick={() => setIsManageTeamOpen(false)} />
