@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia', // Ensure this matches your installed version or error log
+  apiVersion: '2026-01-28.clover', // Fixed: Changed from '2025-01-27.acacia' to match installed version
 });
 
 const supabaseAdmin = createClient(

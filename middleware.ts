@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // 4. Define paths that DO NOT require login (Public Paths)
-  const publicPaths = ['/login', '/signup', '/auth/callback', '/forgot-password']
+  const publicPaths = ['/login', '/signup', '/auth/callback', '/forgot-password', '/']
   const isPublicPath = publicPaths.some(path => request.nextUrl.pathname.startsWith(path))
 
   // 5. REDIRECT LOGIC
@@ -73,7 +73,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // (Optional) If user IS logged in and tries to visit /login -> Redirect to Dashboard
-  if (user && isPublicPath && request.nextUrl.pathname === '/login') {
+  if (user && request.nextUrl.pathname === '/login') {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
@@ -90,7 +90,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - Public assets (images, fonts, etc)
+     * - API routes (let them handle their own auth)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
