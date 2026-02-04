@@ -3,28 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import { FileObject } from '@supabase/storage-js';
 import { 
   ArrowLeftIcon,
   TrashIcon,
   DocumentIcon
 } from '@heroicons/react/24/outline';
-
-type FileObject = {
-  name: string;
-  id: string;
-  updated_at: string;
-  created_at: string;
-  last_accessed_at: string;
-  metadata: {
-    eTag: string;
-    size: number;
-    mimetype: string;
-    cacheControl: string;
-    lastModified: string;
-    contentLength: number;
-    httpStatusCode: number;
-  };
-};
 
 export default function DocumentsPage() {
   const router = useRouter();
