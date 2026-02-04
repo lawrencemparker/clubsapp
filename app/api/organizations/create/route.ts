@@ -2,9 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Initialize Stripe
+// Initialize Stripe with the correct API version matching your installed library
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16', // Use the latest compatible version
+  apiVersion: '2026-01-28.clover', 
 });
 
 // Admin Client to bypass RLS for creation
