@@ -106,12 +106,17 @@ export default function SuperAdminPage() {
   const handleCreateClick = () => {
     setEditingOrgId(null); 
     setFormData({
-      status: 'pending',   // Default Status
-      storageLimitGB: 1,   // Default Storage
-      monthlyFee: 250,     // Default Fee
+      status: 'pending',   // Default Status to Pending
+      storageLimitGB: 1,   // Default Storage to 1
+      monthlyFee: 250,     // Default Fee to 250
       storageUsedGB: 0,
       firstName: '',
-      lastName: ''
+      lastName: '',
+      contactPhone: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: ''
     });
     setIsEditModalOpen(true);
   };
@@ -314,17 +319,29 @@ export default function SuperAdminPage() {
                     </div>
                   )}
                   <div><label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Email</label><input type="email" required className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.contactEmail || ''} onChange={e => setFormData({...formData, contactEmail: e.target.value})} /></div>
+                  <div><label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Phone</label><input type="tel" className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.contactPhone || ''} onChange={e => setFormData({...formData, contactPhone: e.target.value})} /></div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3">
                   <h4 className="text-sm font-bold text-white">Subscription</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {/* Spinners Removed */}
                     <div><label className="block text-[10px] font-bold text-indigo-300 uppercase mb-1">Storage (GB)</label><input type="number" className="glass-input w-full bg-slate-950 border-indigo-500/30 text-sm p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={formData.storageLimitGB || 0} onChange={e => setFormData({...formData, storageLimitGB: Number(e.target.value)})} /></div>
                     <div><label className="block text-[10px] font-bold text-emerald-300 uppercase mb-1">Fee ($)</label><input type="number" className="glass-input w-full bg-slate-950 border-emerald-500/30 text-sm p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value={formData.monthlyFee || 0} onChange={e => setFormData({...formData, monthlyFee: Number(e.target.value)})} /></div>
                   </div>
                   <div className="pt-2"><label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Status</label><select className="glass-input w-full bg-slate-950 border-white/10 text-sm p-2" value={formData.status || 'pending'} onChange={e => setFormData({...formData, status: e.target.value as any})}><option value="active">Active</option><option value="pending">Pending</option></select></div>
                 </div>
               </div>
+
+              {/* RESTORED LOCATION FIELDS */}
+              <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3">
+                <h4 className="text-sm font-bold text-white flex items-center gap-2">Location</h4>
+                <div className="grid grid-cols-4 gap-3">
+                    <div className="col-span-4"><input type="text" placeholder="Address" className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} /></div>
+                    <div className="col-span-2"><input type="text" placeholder="City" className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.city || ''} onChange={e => setFormData({...formData, city: e.target.value})} /></div>
+                    <div><input type="text" placeholder="State" className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.state || ''} onChange={e => setFormData({...formData, state: e.target.value})} /></div>
+                    <div><input type="text" placeholder="Zip" className="glass-input w-full bg-slate-950 text-sm p-2" value={formData.zip || ''} onChange={e => setFormData({...formData, zip: e.target.value})} /></div>
+                </div>
+              </div>
+
               <div className="flex justify-end gap-3 pt-4 border-t border-white/10"><button type="button" onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white">Cancel</button><button type="submit" className="glass-button bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold text-sm">{editingOrgId ? 'Save Changes' : 'Create Organization'}</button></div>
             </form>
           </div>
@@ -339,7 +356,6 @@ export default function SuperAdminPage() {
             <form onSubmit={handleAddSuperAdmin} className="bg-slate-950/50 p-4 rounded-xl border border-white/10">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Promote Existing User</h3>
               {adminError && <div className="text-red-400 text-xs mb-2 font-bold">{adminError}</div>}
-              {/* String Syntax Corrected */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div className="col-span-1"><input type="text" placeholder="First Name" className="glass-input w-full bg-slate-900 border-white/10 text-sm p-2" value={newAdminData.firstName} onChange={(e) => setNewAdminData({ ...newAdminData, firstName: e.target.value })} /></div>
                 <div className="col-span-1"><input type="text" placeholder="Last Name" className="glass-input w-full bg-slate-900 border-white/10 text-sm p-2" value={newAdminData.lastName} onChange={(e) => setNewAdminData({ ...newAdminData, lastName: e.target.value })} /></div>
